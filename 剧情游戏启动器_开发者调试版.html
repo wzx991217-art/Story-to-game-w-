@@ -4307,7 +4307,7 @@
       applyNodeAtmosphere(node);
       updateProgress(node.progress);
 
-      if (node.isEnding) {
+      if (node.isEnding && !node.segments) {
         showEnding(node);
         return;
       }
@@ -4350,7 +4350,9 @@
 
       if (state.segmentIndex >= segments.length) {
         el.continueHint.classList.remove("is-visible");
-        if (node.choices) {
+        if (node.isEnding) {
+          showEnding(node);
+        } else if (node.choices) {
           renderChoiceContext(node);
           renderChoices(node.choices);
         } else if (node.next) {
@@ -7130,7 +7132,7 @@
       }
       if (state.isInputLocked || !state.story || el.choices.classList.contains("is-visible")) return;
       const node = getNode(state.currentNodeId);
-      if (node.isEnding) return;
+      if (node.isEnding && !node.segments) return;
       const segments = node.segments || [];
       if (state.segmentIndex < segments.length) {
         pushPageHistory();
